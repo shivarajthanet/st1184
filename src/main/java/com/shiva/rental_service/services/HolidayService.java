@@ -4,14 +4,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.TemporalAdjusters;
-import java.util.HashSet;
-import java.util.Set;
 
 public class HolidayService {
-    private final Set<LocalDate> holidays;
 
     public HolidayService() {
-        this.holidays = new HashSet<>();
     }
 
     public boolean isHoliday(LocalDate date) {

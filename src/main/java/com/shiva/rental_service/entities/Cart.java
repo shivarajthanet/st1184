@@ -1,12 +1,11 @@
 package com.shiva.rental_service.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Map;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class Cart {
     private Map<Tool, Integer> toolQuantities; // Tool and its quantity

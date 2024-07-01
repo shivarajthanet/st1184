@@ -28,7 +28,7 @@ public class TestCasesAsPerDocument {
         toolInventory.put("JAKR", new Tool("JAKR", "Jackhammer", "Ridgid", 2.99, false, false));
 
         HolidayService holidayService = new HolidayService();
-        checkoutService = new CheckoutService(toolInventory, holidayService);
+        checkoutService = new CheckoutService(holidayService);
     }
 
     @Test
@@ -50,7 +50,17 @@ public class TestCasesAsPerDocument {
         Cart cart = new Cart(toolQuantities1, 3, LocalDate.of(2020, 7, 2));
         RentalAgreement agreement = checkoutService.checkout(cart, 10);
         Assertions.assertEquals(5.37, agreement.getFinalCharge(), 0.01);
+    }
 
+
+    @Test
+    public void test2_independence_day_on_sunday() {
+
+        Map<Tool, Integer> toolQuantities1 = new HashMap<>();
+        toolQuantities1.put(toolInventory.get("LADW"), 1);
+        Cart cart = new Cart(toolQuantities1, 3, LocalDate.of(2021, 7, 2));
+        RentalAgreement agreement = checkoutService.checkout(cart, 10);
+        Assertions.assertEquals(5.37, agreement.getFinalCharge(), 0.01);
     }
 
     @Test

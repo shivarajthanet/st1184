@@ -10,4 +10,9 @@ class RentalServiceApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	public void main() {
+		RentalServiceApplication.main(new String[] {});
+	}
+
 }

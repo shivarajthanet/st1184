@@ -35,3 +35,7 @@ cd tool-rental-application
 ./gradlew test
 ```
 
+## review the test coverage post test execution 
+```
+build/reports/jacoco/test/html/index.html
+```

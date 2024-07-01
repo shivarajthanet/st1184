@@ -1,11 +1,13 @@
 package com.shiva.rental_service.entities;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class RentalAgreement {
     private String toolCode;
     private String toolType;
@@ -24,9 +26,20 @@ public class RentalAgreement {
     public String toString() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy");
         return String.format(
-                "Tool code: %s\nTool type: %s\nTool brand: %s\nRental days: %d\nCheckout date: %s\nDue date: %s\n" +
-                        "Daily rental charge: $%.2f\nCharge days: %d\nPre-discount charge: $%.2f\nDiscount percent: %d%%\n" +
-                        "Discount amount: $%.2f\nFinal charge: $%.2f\n",
+                """
+                        Tool code: %s
+                        Tool type: %s
+                        Tool brand: %s
+                        Rental days: %d
+                        Checkout date: %s
+                        Due date: %s
+                        Daily rental charge: $%.2f
+                        Charge days: %d
+                        Pre-discount charge: $%.2f
+                        Discount percent: %d%%
+                        Discount amount: $%.2f
+                        Final charge: $%.2f
+                        """,
                 toolCode, toolType, toolBrand, rentalDays, checkoutDate.format(dateFormatter), dueDate.format(dateFormatter),
                 dailyRentalCharge, chargeDays, preDiscountCharge, discountPercent, discountAmount, finalCharge
         );

@@ -7,16 +7,20 @@ import com.shiva.rental_service.exception.InvalidDateRangeException;
 import com.shiva.rental_service.exception.InvalidDiscountException;
 import com.shiva.rental_service.exception.NoChargeableDaysException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
+
+
 public class CheckoutService {
 
     private final HolidayService holidayService;
 
-    public CheckoutService(Map<String, Tool> toolInventory, HolidayService holidayService) {
+    public CheckoutService( HolidayService holidayService) {
         this.holidayService = holidayService;
     }
 
@@ -25,12 +29,12 @@ public class CheckoutService {
             throw new InvalidDiscountException("Discount percent must be between 0 and 100.");
         }
 
-        if (cart.getEndDate().isBefore(cart.getStartDate())) {
-            throw new InvalidDateRangeException("End date cannot be before start date.");
+        if (cart == null || cart.getEndDate().isBefore(cart.getStartDate()) || cart.getToolQuantities() == null) {
+            throw new InvalidDateRangeException("End date cannot be before start date or tool quantities are null.");
         }
 
         int rentalDays = (int) (cart.getStartDate().until(cart.getEndDate(), ChronoUnit.DAYS) + 1);
-        double totalPreDiscountCharge = 0;
+        BigDecimal totalPreDiscountCharge = BigDecimal.ZERO;
         int totalChargeDays = 0;
 
         for (Map.Entry<Tool, Integer> entry : cart.getToolQuantities().entrySet()) {
@@ -38,18 +42,21 @@ public class CheckoutService {
             int quantity = entry.getValue();
 
             int chargeDays = calculateChargeDays(cart.getStartDate(), cart.getEndDate(), tool);
-            double preDiscountCharge = chargeDays * tool.getDailyCharge() * quantity;
+            BigDecimal preDiscountCharge = BigDecimal.valueOf(chargeDays)
+                    .multiply(BigDecimal.valueOf(tool.getDailyCharge()))
+                    .multiply(BigDecimal.valueOf(quantity));
 
             totalChargeDays += chargeDays;
-            totalPreDiscountCharge += preDiscountCharge;
+            totalPreDiscountCharge = totalPreDiscountCharge.add(preDiscountCharge);
         }
 
         if (totalChargeDays == 0) {
             throw new NoChargeableDaysException("No chargeable days after excluding holidays and weekends.");
         }
 
-        double discountAmount = totalPreDiscountCharge * discountPercent / 100;
-        double finalCharge = totalPreDiscountCharge - discountAmount;
+        BigDecimal discountAmount = totalPreDiscountCharge.multiply(BigDecimal.valueOf(discountPercent))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        BigDecimal finalCharge = totalPreDiscountCharge.subtract(discountAmount);
 
         Tool firstTool = cart.getToolQuantities().keySet().iterator().next();
         RentalAgreement agreement = new RentalAgreement();
@@ -61,10 +68,10 @@ public class CheckoutService {
         agreement.setDueDate(cart.getEndDate());
         agreement.setDailyRentalCharge(firstTool.getDailyCharge());
         agreement.setChargeDays(totalChargeDays);
-        agreement.setPreDiscountCharge(totalPreDiscountCharge);
+        agreement.setPreDiscountCharge(totalPreDiscountCharge.doubleValue());
         agreement.setDiscountPercent(discountPercent);
-        agreement.setDiscountAmount(discountAmount);
-        agreement.setFinalCharge(finalCharge);
+        agreement.setDiscountAmount(discountAmount.doubleValue());
+        agreement.setFinalCharge(finalCharge.doubleValue());
 
         return agreement;
     }

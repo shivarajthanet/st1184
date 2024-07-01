@@ -29,7 +29,7 @@ public class CheckoutServiceTest {
         toolInventory.put("JAKR", new Tool("JAKR", "Jackhammer", "Ridgid", 2.99, false, false));
 
         HolidayService holidayService = new HolidayService();
-        checkoutService = new CheckoutService(toolInventory, holidayService);
+        checkoutService = new CheckoutService(holidayService);
     }
 
 
@@ -54,6 +54,18 @@ public class CheckoutServiceTest {
     }
 
     @Test
+    public void checkout_with_emptyCart(){
+        Assertions.assertThrows(InvalidDateRangeException.class, () -> checkoutService.checkout(null, 10));
+    }
+
+    @Test
+    public void checkout_with_Cart_having_no_tools(){
+        Cart cart = new Cart(null, LocalDate.of(2024, 7, 2), LocalDate.of(2024, 7, 5));
+        Assertions.assertThrows(InvalidDateRangeException.class, () -> checkoutService.checkout(cart, 10));
+    }
+
+
+    @Test
     public void testInvalidDiscountException() {
         // Test Case: Discount is more than 100%
         Map<Tool, Integer> toolQuantities = new HashMap<>();
@@ -61,6 +73,16 @@ public class CheckoutServiceTest {
         Cart cart = new Cart(toolQuantities, LocalDate.of(2024, 6, 23), LocalDate.of(2024, 6, 27));
 
         Assertions.assertThrows(InvalidDiscountException.class, () -> checkoutService.checkout(cart, 101));
+    }
+
+    @Test
+    public void testInvalidDiscountException_negative() {
+        // Test Case: Discount is more than 100%
+        Map<Tool, Integer> toolQuantities = new HashMap<>();
+        toolQuantities.put(toolInventory.get("LADW"), 1);
+        Cart cart = new Cart(toolQuantities, LocalDate.of(2024, 6, 23), LocalDate.of(2024, 6, 27));
+
+        Assertions.assertThrows(InvalidDiscountException.class, () -> checkoutService.checkout(cart, -10));
     }
 
     @Test
