@@ -5,9 +5,13 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a rental agreement for a tool, containing information such as tool code, type, brand, rental days,
+ * checkout date, due date, daily rental charge, charge days, pre-discount charge, discount percent, discount amount,
+ * and final charge.
+ */
 @Getter
 @Setter
-@NoArgsConstructor
 public class RentalAgreement {
     private String toolCode;
     private String toolType;
