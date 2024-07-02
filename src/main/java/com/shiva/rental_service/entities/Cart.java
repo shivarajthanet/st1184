@@ -14,9 +14,9 @@ public class Cart {
 
 
     // New constructor
-    public Cart(Map<Tool, Integer> toolQuantities, int totalDays, LocalDate endDate) {
+    public Cart(Map<Tool, Integer> toolQuantities, int totalDays, LocalDate startDate) {
         this.toolQuantities = toolQuantities;
-        this.endDate = endDate;
-        this.startDate = endDate.minusDays(totalDays - 1);
+        this.startDate = startDate;
+        this.endDate = startDate.plusDays(totalDays - 1);
     }
 }

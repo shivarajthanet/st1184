@@ -49,7 +49,7 @@ public class TestCasesAsPerDocument {
         toolQuantities1.put(toolInventory.get("LADW"), 1);
         Cart cart = new Cart(toolQuantities1, 3, LocalDate.of(2020, 7, 2));
         RentalAgreement agreement = checkoutService.checkout(cart, 10);
-        Assertions.assertEquals(5.37, agreement.getFinalCharge(), 0.01);
+        Assertions.assertEquals(3.58, agreement.getFinalCharge(), 0.01);
     }
 
 
@@ -70,7 +70,7 @@ public class TestCasesAsPerDocument {
         toolQuantities1.put(toolInventory.get("CHNS"), 1);
         Cart cart = new Cart(toolQuantities1, 5, LocalDate.of(2015, 7, 2));
         RentalAgreement agreement = checkoutService.checkout(cart, 25);
-        Assertions.assertEquals(4.47, agreement.getFinalCharge(), 0.01);
+        Assertions.assertEquals(3.35, agreement.getFinalCharge(), 0.01);
 
     }
 
@@ -81,7 +81,7 @@ public class TestCasesAsPerDocument {
         toolQuantities1.put(toolInventory.get("JAKD"), 1);
         Cart cart = new Cart(toolQuantities1, 6, LocalDate.of(2015, 9, 3));
         RentalAgreement agreement = checkoutService.checkout(cart, 0);
-        Assertions.assertEquals(11.96, agreement.getFinalCharge(), 0.01);
+        Assertions.assertEquals(8.97, agreement.getFinalCharge(), 0.01);
 
     }
 
@@ -93,7 +93,7 @@ public class TestCasesAsPerDocument {
         toolQuantities1.put(toolInventory.get("JAKR"), 1);
         Cart cart = new Cart(toolQuantities1, 9, LocalDate.of(2015, 7, 2));
         RentalAgreement agreement = checkoutService.checkout(cart, 0);
-        Assertions.assertEquals(20.93, agreement.getFinalCharge(), 0.01);
+        Assertions.assertEquals(17.94, agreement.getFinalCharge(), 0.01);
 
     }
 
@@ -104,7 +104,7 @@ public class TestCasesAsPerDocument {
         toolQuantities1.put(toolInventory.get("JAKR"), 1);
         Cart cart = new Cart(toolQuantities1, 4, LocalDate.of(2020, 7, 2));
         RentalAgreement agreement = checkoutService.checkout(cart, 50);
-        Assertions.assertEquals(5.98, agreement.getFinalCharge(), 0.01);
+        Assertions.assertEquals(1.49, agreement.getFinalCharge(), 0.01);
 
     }
 
