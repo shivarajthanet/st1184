@@ -41,14 +41,14 @@ public class CheckoutServiceTest {
         toolQuantities1.put(toolInventory.get("LADW"), 1);
         Cart cart1 = new Cart(toolQuantities1, LocalDate.of(2024, 7, 2), LocalDate.of(2024, 7, 5));
         RentalAgreement agreement1 = checkoutService.checkout(cart1, 10);
-        Assertions.assertEquals(agreement1.getToolCode(), "LADW");
+        Assertions.assertEquals(agreement1.getTools().get(0).getCode(), "LADW");
         Assertions.assertEquals(agreement1.getFinalCharge(), 5.37, 0.01);
 //
         Map<Tool, Integer> toolQuantities2 = new HashMap<>();
         toolQuantities2.put(toolInventory.get("CHNS"), 1);
         Cart cart2 = new Cart(toolQuantities2, LocalDate.of(2024, 7, 2), LocalDate.of(2024, 7, 6));
         RentalAgreement agreement2 = checkoutService.checkout(cart2, 25);
-        Assertions.assertEquals(agreement2.getToolCode(), "CHNS");
+        Assertions.assertEquals(agreement2.getTools().get(0).getCode(), "CHNS");
         Assertions.assertEquals(agreement2.getFinalCharge(), 4.47, 0.01);
 
     }

@@ -59,6 +59,8 @@ public class CheckoutService {
         BigDecimal totalPreDiscountCharge = BigDecimal.ZERO;
         int totalChargeDays = 0;
 
+        RentalAgreement agreement = new RentalAgreement();
+
         // Calculate charges for each tool in the cart
         for (Map.Entry<Tool, Integer> entry : cart.getToolQuantities().entrySet()) {
             Tool tool = entry.getKey();
@@ -68,8 +70,10 @@ public class CheckoutService {
             int chargeDays = calculateChargeDays(cart.getStartDate(), cart.getEndDate(), tool);
             BigDecimal preDiscountCharge = BigDecimal.valueOf(chargeDays).multiply(BigDecimal.valueOf(tool.getDailyCharge())).multiply(BigDecimal.valueOf(quantity));
 
+
             totalChargeDays += chargeDays;
             totalPreDiscountCharge = totalPreDiscountCharge.add(preDiscountCharge);
+            agreement.addTool(tool, quantity, chargeDays);
         }
 
         // Handle case where no chargeable days are found
@@ -81,17 +85,10 @@ public class CheckoutService {
         BigDecimal discountAmount = totalPreDiscountCharge.multiply(BigDecimal.valueOf(discountPercent)).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
         BigDecimal finalCharge = totalPreDiscountCharge.subtract(discountAmount);
 
-        // Create and populate the rental agreement
-        Tool firstTool = cart.getToolQuantities().keySet().iterator().next();
-        RentalAgreement agreement = new RentalAgreement();
-        agreement.setToolCode(firstTool.getCode());
-        agreement.setToolType(firstTool.getType());
-        agreement.setToolBrand(firstTool.getBrand());
+
         agreement.setRentalDays(rentalDays);
         agreement.setCheckoutDate(cart.getStartDate());
         agreement.setDueDate(cart.getEndDate());
-        agreement.setDailyRentalCharge(firstTool.getDailyCharge());
-        agreement.setChargeDays(totalChargeDays);
         agreement.setPreDiscountCharge(totalPreDiscountCharge.doubleValue());
         agreement.setDiscountPercent(discountPercent);
         agreement.setDiscountAmount(discountAmount.doubleValue());
