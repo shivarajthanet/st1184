@@ -3,9 +3,11 @@ package com.shiva.rental_service.services;
 import com.shiva.rental_service.entities.Cart;
 import com.shiva.rental_service.entities.RentalAgreement;
 import com.shiva.rental_service.entities.Tool;
+import com.shiva.rental_service.exception.InvalidDataException;
 import com.shiva.rental_service.exception.InvalidDateRangeException;
 import com.shiva.rental_service.exception.InvalidDiscountException;
 import com.shiva.rental_service.exception.NoChargeableDaysException;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,7 +33,7 @@ public class CheckoutService {
      *
      * @param holidayService the HolidayService to be used for checking holidays.
      */
-    public CheckoutService(HolidayService holidayService) {
+    public CheckoutService(@NonNull final HolidayService holidayService) {
         this.holidayService = holidayService;
     }
 
@@ -49,8 +51,13 @@ public class CheckoutService {
             throw new InvalidDiscountException("Discount percent must be between 0 and 100.");
         }
 
+        if (cart == null || cart.getToolQuantities() == null || cart.getToolQuantities().isEmpty()) {
+            throw new InvalidDataException("Cart and tool quantities cannot be null.");
+        }
+
+
         // Validate the cart and its contents
-        if (cart == null || cart.getEndDate().isBefore(cart.getStartDate()) || cart.getToolQuantities() == null) {
+        if (cart.getStartDate() == null || cart.getEndDate() == null || cart.getEndDate().isBefore(cart.getStartDate())) {
             throw new InvalidDateRangeException("End date cannot be before start date or tool quantities are null.");
         }
 

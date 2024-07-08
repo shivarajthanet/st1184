@@ -3,6 +3,7 @@ package com.shiva.rental_service;
 import com.shiva.rental_service.entities.Cart;
 import com.shiva.rental_service.entities.RentalAgreement;
 import com.shiva.rental_service.entities.Tool;
+import com.shiva.rental_service.exception.InvalidDataException;
 import com.shiva.rental_service.exception.InvalidDateRangeException;
 import com.shiva.rental_service.exception.InvalidDiscountException;
 import com.shiva.rental_service.exception.NoChargeableDaysException;
@@ -54,16 +55,53 @@ public class CheckoutServiceTest {
     }
 
     @Test
-    public void checkout_with_emptyCart(){
-        Assertions.assertThrows(InvalidDateRangeException.class, () -> checkoutService.checkout(null, 10));
+    public void checkout_with_emptyCart() {
+        Assertions.assertThrows(InvalidDataException.class, () -> checkoutService.checkout(null, 10));
     }
 
     @Test
-    public void checkout_with_Cart_having_no_tools(){
+    public void checkout_with_Cart_having_null_tools() {
         Cart cart = new Cart(null, LocalDate.of(2024, 7, 2), LocalDate.of(2024, 7, 5));
+        Assertions.assertThrows(InvalidDataException.class, () -> checkoutService.checkout(cart, 10));
+    }
+
+    @Test
+    public void checkout_with_Cart_having_empty_tools() {
+        Cart cart = new Cart(new HashMap<>(), LocalDate.of(2024, 7, 2), LocalDate.of(2024, 7, 5));
+        Assertions.assertThrows(InvalidDataException.class, () -> checkoutService.checkout(cart, 10));
+    }
+
+    @Test
+    public void checkout_with_Cart_having_null_start_dates() {
+        Map<Tool, Integer> toolQuantities1 = new HashMap<>();
+        toolQuantities1.put(toolInventory.get("LADW"), 1);
+        Cart cart = new Cart(toolQuantities1, null, LocalDate.of(2024, 7, 5));
         Assertions.assertThrows(InvalidDateRangeException.class, () -> checkoutService.checkout(cart, 10));
     }
 
+
+    @Test
+    public void checkout_with_Cart_having_null_end_dates() {
+        Map<Tool, Integer> toolQuantities1 = new HashMap<>();
+        toolQuantities1.put(toolInventory.get("LADW"), 1);
+        Cart cart = new Cart(toolQuantities1, LocalDate.of(2024, 7, 5), null);
+        Assertions.assertThrows(InvalidDateRangeException.class, () -> checkoutService.checkout(cart, 10));
+    }
+
+    @Test
+    public void checkout_with_Cart_having_null_dates() {
+        Map<Tool, Integer> toolQuantities1 = new HashMap<>();
+        toolQuantities1.put(toolInventory.get("LADW"), 1);
+        Cart cart = new Cart(toolQuantities1, null, null);
+        Assertions.assertThrows(InvalidDateRangeException.class, () -> checkoutService.checkout(cart, 10));
+    }
+
+    @Test
+    public void invalid_total_days() {
+        Map<Tool, Integer> toolQuantities1 = new HashMap<>();
+        toolQuantities1.put(toolInventory.get("JAKR"), 1);
+        Assertions.assertThrows(InvalidDataException.class, () -> new Cart(toolQuantities1, LocalDate.of(2020, 7, 2),0));
+    }
 
     @Test
     public void testInvalidDiscountException() {

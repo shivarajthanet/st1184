@@ -6,13 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class RentalServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	public void main() {
-		RentalServiceApplication.main(new String[] {});
-	}
+    @Test
+    public void testMain() {
+        RentalServiceApplication.main(new String[]{});
+    }
 
 }

@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@Data
 public class RentalAgreement {
     // Common properties
     private int rentalDays;
@@ -24,8 +23,13 @@ public class RentalAgreement {
     private double discountAmount;
     private double finalCharge;
 
+    @Setter(AccessLevel.NONE)
+    private List<ToolInfo> tools = new ArrayList<>();
+
+
     // Tool-specific information
-    @Data
+    @Getter
+    @Setter
     public static class ToolInfo {
         private String code;
         private String type;
@@ -35,7 +39,6 @@ public class RentalAgreement {
         private int chargeDays;
     }
 
-    private List<ToolInfo> tools = new ArrayList<>();
 
     public void addTool(Tool tool, int quantity, int chargeDays) {
         ToolInfo toolInfo = new ToolInfo();
