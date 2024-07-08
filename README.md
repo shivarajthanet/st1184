@@ -19,6 +19,25 @@ This is a Spring Boot application for a tool rental service. The application cal
 
 ## Getting Started
 
+### Clone the Repository
+
+```sh
+git clone https://github.com/yourusername/tool-rental-application.git
+cd tool-rental-application
+```
+
+## Build and run the Application
+```sh
+./gradlew build
+./gradlew bootRun
+```
+
+## Execute Test Cases
+```sh
+./gradlew test
+```
+
+
 ### Usage
 
 1. configure the tools inventory as per below example, more tools can be added to the collections
@@ -46,24 +65,16 @@ Cart cart2 = new Cart(toolQuantities, LocalDate.of(2024, 7, 5), 2);
 RentalAgreement agreement = checkoutService.checkout(cart1, 10);
 ```
 
+### running the application as interactive command line 
+```java
+//building application for command line
+./gradlew customJar
 
-### Clone the Repository
+//running the application is interactive command line
+java -jar build/libs/rental-service-0.0.1-SNAPSHOT.jar
 
-```sh
-git clone https://github.com/yourusername/tool-rental-application.git
-cd tool-rental-application
 ```
 
-## Build and run the Application
-```sh
-./gradlew build
-./gradlew bootRun
-```
-
-## Execute Test Cases
-```sh
-./gradlew test
-```
 
 ## review the test coverage post test execution 
 ```

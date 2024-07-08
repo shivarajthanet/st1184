@@ -46,3 +46,17 @@ jacocoTestReport {
 	dependsOn test // tests are required to run before generating the report
 
 }
+
+task customJar(type: Jar) {
+	duplicatesStrategy = 'INCLUDE'
+	manifest {
+		attributes(
+				'Main-Class': 'com.shiva.rental_service.RentalServiceApplicationCommandLine'
+		)
+	}
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	// Include specific classes or directories if necessary
+	from sourceSets.main.output
+}

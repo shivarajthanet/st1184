@@ -44,7 +44,6 @@ public class TestCasesAsPerDocument {
 
     @Test
     public void test2() {
-
         Map<Tool, Integer> toolQuantities1 = new HashMap<>();
         toolQuantities1.put(toolInventory.get("LADW"), 1);
         Cart cart = new Cart(toolQuantities1, LocalDate.of(2020, 7, 2), 3);

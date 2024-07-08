@@ -4,6 +4,7 @@ import com.shiva.rental_service.exception.InvalidDataException;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,13 +20,22 @@ import java.util.Map;
  */
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Cart {
 
     private Map<Tool, Integer> toolQuantities; // Tool and its quantity
 
+    @Setter
     private LocalDate startDate;
 
+    @Setter
     private LocalDate endDate;
+
+    public void addTool(Tool tool, int quantity) {
+        toolQuantities = new HashMap<>();
+        toolQuantities.merge(tool, quantity, Integer::sum);
+    }
+
 
     /**
      * Initializes a Cart object with the given tool quantities, total days, and start date.

@@ -142,4 +142,14 @@ public class CheckoutServiceTest {
 
         Assertions.assertThrows(NoChargeableDaysException.class, () -> checkoutService.checkout(cart, 10));
     }
+
+    @Test
+    public void testForCommandLine() {
+        Cart cart = new Cart();
+        cart.addTool(toolInventory.get("JAKD"), 1);
+        cart.setStartDate(LocalDate.of(2024, 7, 4));
+        cart.setEndDate(LocalDate.of(2024, 7, 6));
+        RentalAgreement agreement = checkoutService.checkout(cart, 10);
+        Assertions.assertEquals(2.69, agreement.getFinalCharge(), 0.01);
+    }
 }
